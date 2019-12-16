@@ -9,3 +9,9 @@ C:\Users\سلمىشريفاحمد\Desktop\CS\3 Year Three - First Term\Algo\Proj
 C:\Users\سلمىشريفاحمد\Desktop\CS\3 Year Three - First Term\Algo\Project\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
 C:\Users\سلمىشريفاحمد\Desktop\CS\3 Year Three - First Term\Algo\Project\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
 C:\Users\سلمىشريفاحمد\Desktop\CS\3 Year Three - First Term\Algo\Project\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojAssemblyReference.cache
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb

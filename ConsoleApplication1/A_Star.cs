@@ -22,6 +22,13 @@ namespace ConsoleApplication1
         public A_Star(int[,] start, int[,]goal)
         {
             this.goal = goal;
+            for (int i = 0; i < goal.GetLength(0); i++)
+            {
+                for (int j = 0; j < goal.GetLength(1); j++)
+                {
+                    goalIndex.Add(this.goal[i, j],new KeyValuePair<int,int>(i,j));
+                }
+            }
             //currentElements contains the initial Matrix
             currentElements = start;
             //initialize the OpenStats , ClosedStates & Parents 
@@ -36,7 +43,7 @@ namespace ConsoleApplication1
             //bool to see if the matix is the goal or not
             isTheGoal = false;
             //make the first state
-            State start = new State(null, arr,  0, true, ref isTheGoal);
+            State start = new State(null, arr,  0, false, ref isTheGoal,goalIndex);
             //insert the first state in OpenStats
             OpenStats.insert(start);
             //Start A* Algorithem
@@ -70,11 +77,13 @@ namespace ConsoleApplication1
                     isInClosed = false;
                     isTheGoal = false;
                     // make a State s
-                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex + 1, emptyColIndex,current.CostInDepth, true, ref isInClosed, ref ClosedStates, ref isTheGoal);
+                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex + 1, emptyColIndex,current.CostInDepth, false, ref isInClosed, ref ClosedStates, ref isTheGoal,goalIndex);
                     //see if the state is the goal (it dependes on some operations happend in the state class Constructor )
                     if (isTheGoal)
                     {
                         Console.WriteLine("Number of Movements = " + s.CostInDepth);
+                        // return;
+                        PrintSolution(s);
                         return;
                     }
                     //see if the state is In the closedState (it dependes on some operations happend in the state class Constructor )
@@ -88,10 +97,12 @@ namespace ConsoleApplication1
                 {
                     isInClosed = false;
                     isTheGoal = false;
-                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex - 1, emptyColIndex, current.CostInDepth, true, ref isInClosed, ref ClosedStates, ref isTheGoal);//,goalIndex);
+                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex - 1, emptyColIndex, current.CostInDepth, false, ref isInClosed, ref ClosedStates, ref isTheGoal,goalIndex);
                     if (isTheGoal)
                     {
                         Console.WriteLine("Number of Movements = " + s.CostInDepth);
+                        // return;
+                        PrintSolution(s);
                         return;
                     }
                     if (!isInClosed)
@@ -102,10 +113,12 @@ namespace ConsoleApplication1
                 {
                     isInClosed = false;
                     isTheGoal = false;
-                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex, emptyColIndex + 1, current.CostInDepth, true, ref isInClosed, ref ClosedStates, ref isTheGoal);//,goalIndex);
+                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex, emptyColIndex + 1, current.CostInDepth, false, ref isInClosed, ref ClosedStates, ref isTheGoal,goalIndex);
                     if (isTheGoal)
                     {
                         Console.WriteLine("Number of Movements = " + s.CostInDepth);
+                        //return;
+                        PrintSolution(s);
                         return;
                     }
                     if (!isInClosed)
@@ -116,10 +129,12 @@ namespace ConsoleApplication1
                 {
                     isInClosed = false;
                     isTheGoal = false;
-                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex, emptyColIndex - 1, current.CostInDepth, true, ref isInClosed, ref ClosedStates, ref isTheGoal);//,goalIndex);
+                    State s = new State(current, current.integers, emptyRowIndex, emptyColIndex, emptyRowIndex, emptyColIndex - 1, current.CostInDepth, false, ref isInClosed, ref ClosedStates, ref isTheGoal ,goalIndex);
                     if (isTheGoal)
                     {
                         Console.WriteLine("Number of Movements = " + s.CostInDepth);
+                        //return;
+                        PrintSolution(s);
                         return;
                     }
                     if (!isInClosed)
@@ -129,6 +144,46 @@ namespace ConsoleApplication1
                 //After finishing the state put it into the ClosedStates
                 ClosedStates.Add(current.unique);
             }
+        }
+        void PrintSolution(State S)
+        {
+            int size = S.integers.GetLength(0);
+            int step = 1;
+            Stack<State> ss=new Stack<State>();
+            while (S.parent !=null)
+            {
+                ss.Push(S);
+                S = S.parent;
+            }
+            ss.Push(S);
+            State solution = ss.Pop();
+            while (ss.Count>0)
+            {
+                for(int i = 0; i < size; i++)
+                {
+                    for(int j = 0; j < size; j++)
+                    {
+                        Console.Write(solution.integers[i, j]);
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine("\n");
+                }
+                Console.WriteLine("\n");
+                solution = ss.Pop();
+                Console.WriteLine("Step Number : " + step.ToString());
+                Console.WriteLine("\n");
+                step++;
+            }
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    Console.Write(solution.integers[i, j]);
+                    Console.Write(" ");
+                }
+                Console.WriteLine("\n");
+            }
+            return;
         }
     }
 }

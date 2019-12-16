@@ -17,7 +17,7 @@ namespace ConsoleApplication1
     {
         public int[,] integers;
         public int cost;
-        State parent;
+        public  State parent;
         public Movements mov;
         public int CostInDepth;
         public int numOfPossibleMov = 0;
@@ -25,8 +25,9 @@ namespace ConsoleApplication1
         public StringBuilder uniqueKey = new StringBuilder();
         public string unique = null;
         int Hamming_Cost;
+        int Manhhaten_Cost;
         //first constructor for the initial state
-        public State(State P, int[,] integers,  int PastCost, bool solveWithHamman, ref bool isTheGoal)
+        public State(State P, int[,] integers,  int PastCost, bool solveWithHamman, ref bool isTheGoal, Dictionary<int, KeyValuePair<int, int>>goalindex)
         {
             //CostInDepth equals 0 becaues it is the initial state 
             CostInDepth = 0;
@@ -39,16 +40,29 @@ namespace ConsoleApplication1
                    // uniqueKey.Append(integers[i, j]);
                 }
 
-            Hamming_Cost = HammingCost(this.integers);
+            //Hamming_Cost = HammingCost(this.integers);
             if (solveWithHamman)
-                cost = CostInDepth + Hamming_Cost;
-            if (Hamming_Cost == 0)
             {
-                //Console.WriteLine(CostInDepth);
-                isTheGoal = true;
+                Hamming_Cost = HammingCost(this.integers);
+                cost = CostInDepth + Hamming_Cost;
+                if (Hamming_Cost == 0)
+                {
+                    //Console.WriteLine(CostInDepth);
+                    isTheGoal = true;
+                }
             }
+            else
+            {
+                Manhhaten_Cost = ManhhatenCost(goalindex);
+                cost = CostInDepth + Manhhaten_Cost;
+
+                if (Manhhaten_Cost == 0)
+                    isTheGoal = true;
+            }
+          
+            
         }
-        public State(State P, int[,] integers, int oldX, int oldY, int newX, int newY, int PastCost, bool solveWithHamman, ref bool isInColsed, ref HashSet<string> ClosedStates, ref bool isTheGoal)//,Dictionary<int, KeyValuePair<int, int>> goalIndex)
+        public State(State P, int[,] integers, int oldX, int oldY, int newX, int newY, int PastCost, bool solveWithHamman, ref bool isInColsed, ref HashSet<string> ClosedStates, ref bool isTheGoal,Dictionary<int, KeyValuePair<int, int>> goalIndex)
         {          
             CostInDepth = PastCost + 1;
             this.integers = new int[integers.GetLength(0), integers.GetLength(1)];
@@ -67,18 +81,28 @@ namespace ConsoleApplication1
             uniqueKey.Replace(integers[oldX, oldY].ToString(), "~").Replace(integers[newX, newY].ToString(), integers[oldX, oldY].ToString()).Replace("~", integers[newX, newY].ToString());
             unique = uniqueKey.ToString();
 
-            Hamming_Cost = HammingCost(this.integers);
+            //Hamming_Cost = HammingCost(this.integers);
             //if i have befor this state , isInColsed will be true so it will not be insert in OpenStats
             if (ClosedStates.Contains(unique))
                 isInColsed = true;
             if (solveWithHamman)
-                cost = CostInDepth + Hamming_Cost;
-            if (Hamming_Cost == 0)
             {
-                //Console.WriteLine(CostInDepth);
-                isTheGoal = true;
+                Hamming_Cost = HammingCost(this.integers);
+                cost = CostInDepth + Hamming_Cost;
+                if (Hamming_Cost == 0)
+                {
+                    //Console.WriteLine(CostInDepth);
+                    isTheGoal = true;
+                }
             }
-            //cost = CostInDepth + ManhhatenCost(integers, goalIndex);
+            else
+            {
+                Manhhaten_Cost = ManhhatenCost(goalIndex);
+                cost = CostInDepth + Manhhaten_Cost;
+
+                if (Manhhaten_Cost == 0)
+                    isTheGoal = true;
+            }
             parent = P;
         }
         public int HammingCost(int[,] integers)
@@ -97,21 +121,24 @@ namespace ConsoleApplication1
                 }
             return cost;
         }
-        /*public int ManhhatenCost(int[,] integers, Dictionary<int, KeyValuePair<int, int>> goalIndex)
+        public int ManhhatenCost(Dictionary<int, KeyValuePair<int, int>> goalindex)
         {
-            int cost = 0;
-            KeyValuePair<int, int> rowAndColIndex;
+            int Hcost=0;
+            KeyValuePair<int, int> GI;
             for (int i = 0; i < integers.GetLength(0); i++)
+            {
                 for (int j = 0; j < integers.GetLength(1); j++)
                 {
-                    rowAndColIndex = goalIndex[integers[i, j]];
-                    if (i != rowAndColIndex.Key || j != rowAndColIndex.Value)
+                    GI= goalindex[integers[i, j]];
+
+                    if (i!=GI.Key||j!=GI.Value)
                     {
-                        cost += Math.Abs(i - rowAndColIndex.Key) + Math.Abs(j - rowAndColIndex.Value);
+                        Hcost += Math.Abs(i - GI.Key) + Math.Abs(j - GI.Value);
                     }
                 }
-            return cost;
-        }*/
+            }
+            return Hcost;
+        }
         public void findIndex(int[,] arr, ref int row, ref int col)
         {
             for (int i = 0; i < arr.GetLength(0); i++)
