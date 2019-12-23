@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace ConsoleApplication1
     class A_Star
     {
         int[,] currentElements;
-        PriorityQueue<State> OpenStats = null;
+        public PriorityQueue<State> OpenStats = null;
         HashSet<string> ClosedStates;
         //HashSet<State> Parents = null;
         Dictionary<int, KeyValuePair<int, int>> goalIndex = new Dictionary<int, KeyValuePair<int, int>>();
@@ -187,3 +188,4 @@ namespace ConsoleApplication1
         }
     }
 }
+

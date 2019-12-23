@@ -15,3 +15,9 @@ C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\Conso
 C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
 C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
 C:\Users\MarwanMahmoud\Source\Repos\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+D:\N-Puzzle\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+D:\N-Puzzle\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+D:\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojAssemblyReference.cache
+D:\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
+D:\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+D:\N-Puzzle\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb

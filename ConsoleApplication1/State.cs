@@ -27,6 +27,10 @@ namespace ConsoleApplication1
         int Hamming_Cost;
         int Manhhaten_Cost;
         //first constructor for the initial state
+        public int getCost()
+        {
+            return cost;
+        }
         public State(State P, int[,] integers,  int PastCost, bool solveWithHamman, ref bool isTheGoal, Dictionary<int, KeyValuePair<int, int>>goalindex)
         {
             //CostInDepth equals 0 becaues it is the initial state 
