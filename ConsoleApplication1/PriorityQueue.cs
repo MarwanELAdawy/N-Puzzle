@@ -5,17 +5,18 @@ using System.Text;
 
 namespace ConsoleApplication1
 {
-    class PriorityQueue<T> where T:State
+    class PriorityQueue
     {
         public int NumOfNodes = 0;
         public int capacity;
-        public State[] Nodes;
-        public PriorityQueue(int cap)
+        public KeyValuePair<int, int> [] Nodes;
+        public PriorityQueue(int cap )
         {
             NumOfNodes = 0;
             capacity = cap;
-            Nodes = new T[cap];
+            Nodes = new KeyValuePair<int, int>[cap];
         }
+       
         public int left(int i)
         {
             return (2 * i) + 1;
@@ -31,9 +32,9 @@ namespace ConsoleApplication1
                 return ind / 2;
             }
         }
-        public void swap(ref State node1, ref State node2)
+        public void swap(ref KeyValuePair<int, int> node1, ref KeyValuePair<int, int> node2)
         {
-            State temp = node1;
+            KeyValuePair<int, int> temp = node1;
             node1 = node2;
             node2 = temp;
         }
@@ -42,11 +43,11 @@ namespace ConsoleApplication1
             int smallest = index;
             int le = left(index);
             int ri = right(index);
-            if (le < NumOfNodes && Nodes[le].cost < Nodes[index].cost)
+            if (le < NumOfNodes && Nodes[le].Value < Nodes[index].Value)
             {
                 smallest = le;
             }
-            if (ri < NumOfNodes && Nodes[ri].cost < Nodes[smallest].cost)
+            if (ri < NumOfNodes && Nodes[ri].Value < Nodes[smallest].Value)
             {
                 smallest = ri;
             }
@@ -79,12 +80,16 @@ namespace ConsoleApplication1
             MinHeapify(0);
             return min;
         }
-        public State extractMin()
+        public KeyValuePair<int, int> extractMin()
         {
+
             if (NumOfNodes <= 0)
-                return null;
+            {
+                KeyValuePair<int, int> x = new KeyValuePair<int, int>(-1,-1);
+                return x;
+            }
             
-            State min = Nodes[0];
+            KeyValuePair<int, int> min = Nodes[0];
             Nodes[0] = Nodes[NumOfNodes - 1];
             NumOfNodes--;
             MinHeapify(0);
@@ -92,19 +97,19 @@ namespace ConsoleApplication1
         }
         public void IncreaseHeabSize()
         {
-            State[] arr = new T[Nodes.Length * 2];
+            KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[Nodes.Length * 2];
             for (int i = 0; i < Nodes.Length; i++)
                 arr[i] = Nodes[i];
             Nodes = arr;
         }
-        public void insert(State key)
+        public void insert(KeyValuePair<int, int> key)
         {
             int i = NumOfNodes;
             NumOfNodes++;
             if (i == Nodes.Length)
                 IncreaseHeabSize();
             Nodes[i] = key;
-            while (i > 0 && Nodes[getParent(i)].cost > Nodes[i].cost)
+            while (i > 0 && Nodes[getParent(i)].Value > Nodes[i].Value)
             {
                 swap(ref Nodes[getParent(i)], ref Nodes[i]);
                 i = getParent(i);

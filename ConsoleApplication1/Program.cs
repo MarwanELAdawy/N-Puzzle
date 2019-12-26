@@ -37,8 +37,9 @@ namespace ConsoleApplication1
             //InitialGraph(res, size);
             EnterAgain:
                 Console.WriteLine();
-                Console.WriteLine("Enter 1 to Show number of puzzle's movements.");
-                Console.WriteLine("Enter 2 to Choose another puzzle.");
+                Console.WriteLine("Enter 1 to Show number of puzzle's movements.H");
+                Console.WriteLine("Enter 2 to Show number of puzzle's movements.M");
+                Console.WriteLine("Enter 3 to Choose another puzzle.");
                 Console.Write("Enter your choice: ");
                 try
                 {
@@ -53,9 +54,13 @@ namespace ConsoleApplication1
                 switch (choice)
                 {
                     case 1:
-                        new A_Star(res, goal);
+
+                        new A_Star(res, goal, size,true);
                         break;
                     case 2:
+                        new A_Star(res, goal, size,false);
+                        break;
+                    case 3:
                         Console.Clear();
                         goto again;
                     default:

@@ -24,60 +24,38 @@ namespace ConsoleApplication1
         public int numOfMov = 0;
         public StringBuilder uniqueKey = new StringBuilder();
         public string unique = null;
-        int Hamming_Cost;
-        int Manhhaten_Cost;
-        //first constructor for the initial state
+        int size;
         public int getCost()
         {
             return cost;
         }
-        public State(State P, int[,] integers,  int PastCost, bool solveWithHamman, ref bool isTheGoal, Dictionary<int, KeyValuePair<int, int>>goalindex)
+        public State(State P, int[,] integers,  int PastCost, ref bool isTheGoal, int size)
         {
+            this.size = size;
             //CostInDepth equals 0 becaues it is the initial state 
             CostInDepth = 0;
-
-            this.integers = new int[integers.GetLength(0), integers.GetLength(1)];
-            for (int i = 0; i < integers.GetLength(0); i++)
-                for (int j = 0; j < integers.GetLength(1); j++)
+            //int size = ;
+            this.integers = new int[size, size];
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
                 {
                     this.integers[i, j] = integers[i, j];
                    // uniqueKey.Append(integers[i, j]);
                 }
-
-            //Hamming_Cost = HammingCost(this.integers);
-            if (solveWithHamman)
-            {
-                Hamming_Cost = HammingCost(this.integers);
-                cost = CostInDepth + Hamming_Cost;
-                if (Hamming_Cost == 0)
-                {
-                    //Console.WriteLine(CostInDepth);
-                    isTheGoal = true;
-                }
-            }
-            else
-            {
-                Manhhaten_Cost = ManhhatenCost(goalindex);
-                cost = CostInDepth + Manhhaten_Cost;
-
-                if (Manhhaten_Cost == 0)
-                    isTheGoal = true;
-            }
-          
-            
+            parent = P;            
         }
-        public State(State P, int[,] integers, int oldX, int oldY, int newX, int newY, int PastCost, bool solveWithHamman, ref bool isInColsed, ref HashSet<string> ClosedStates, ref bool isTheGoal,Dictionary<int, KeyValuePair<int, int>> goalIndex)
+        public State(State P, int[,] integers, int oldX, int oldY, int newX, int newY, int PastCost,  ref bool isInColsed, ref HashSet<string> ClosedStates, int size)
         {          
             CostInDepth = PastCost + 1;
-            this.integers = new int[integers.GetLength(0), integers.GetLength(1)];
-            for (int i = 0; i < integers.GetLength(0); i++)
-                for (int j = 0; j < integers.GetLength(1); j++)
+            //int size = integers.GetLength(0);
+            this.size = size;
+            this.integers = new int[size, size];
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
                 {
                     this.integers[i, j] = integers[i, j];
                     uniqueKey.Append(integers[i, j]);
                 }
-            //Hamming_Cost = HammingCost(this.integers);
-            //swap the integers in the array depending on the movment
             int tmp = this.integers[newX, newY];
             this.integers[newX, newY] = this.integers[oldX, oldY];
             this.integers[oldX, oldY] = tmp;
@@ -85,96 +63,72 @@ namespace ConsoleApplication1
             uniqueKey.Replace(integers[oldX, oldY].ToString(), "~").Replace(integers[newX, newY].ToString(), integers[oldX, oldY].ToString()).Replace("~", integers[newX, newY].ToString());
             unique = uniqueKey.ToString();
 
-            //Hamming_Cost = HammingCost(this.integers);
-            //if i have befor this state , isInColsed will be true so it will not be insert in OpenStats
             if (ClosedStates.Contains(unique))
                 isInColsed = true;
-            if (solveWithHamman)
-            {
-                Hamming_Cost = HammingCost(this.integers);
-                cost = CostInDepth + Hamming_Cost;
-                if (Hamming_Cost == 0)
-                {
-                    //Console.WriteLine(CostInDepth);
-                    isTheGoal = true;
-                }
-            }
-            else
-            {
-                Manhhaten_Cost = ManhhatenCost(goalIndex);
-                cost = CostInDepth + Manhhaten_Cost;
-
-                if (Manhhaten_Cost == 0)
-                    isTheGoal = true;
-            }
+          
             parent = P;
         }
-        public int HammingCost(int[,] integers)
-        {
-            int cost = 0;
-            int number = 1;
 
-            for (int i = 0; i < integers.GetLength(0); i++)
-                for (int j = 0; j < integers.GetLength(1); j++)
-                {
-                    if (number == integers.GetLength(0) * integers.GetLength(0))
-                        number = 0;
-                    if (integers[i, j] != number)
-                        cost++;
-                    number++;
-                }
-            return cost;
-        }
-        public int ManhhatenCost(Dictionary<int, KeyValuePair<int, int>> goalindex)
+        public bool IsSolvable(int size, int[,] start)
         {
-            int Hcost=0;
-            KeyValuePair<int, int> GI;
-            for (int i = 0; i < integers.GetLength(0); i++)
+            int NumOfInv = getInvCount(start, size);
+            //int row = -1;
+            
+            int row=_findIndex(start);
+            int pos = size - row;
+            if (size % 2 == 1) //Odd Number
             {
-                for (int j = 0; j < integers.GetLength(1); j++)
-                {
-                    GI= goalindex[integers[i, j]];
+                if (NumOfInv % 2 == 0)
+                    return true;
+            }
+            else //Even Number
+            {
+                if ((pos % 2 == 0 && NumOfInv % 2 == 1) || (pos % 2 == 1 && NumOfInv % 2 == 0))
+                    return true;
+            }
+            return false;
+        }
 
-                    if (i!=GI.Key||j!=GI.Value)
-                    {
-                        Hcost += Math.Abs(i - GI.Key) + Math.Abs(j - GI.Value);
-                    }
+        public int getInvCount(int[,] start, int size)
+        {
+            int[] start1 = new int[size * size];
+            int index = 0;
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    start1[index] = start[i, j];
+                    index++;
+                }
+
+            int inv_count = 0;
+            for (int i = 0; i < size * size - 1; i++)
+            {
+                if (start1[i] == 0)
+                    continue;
+                for (int j = i + 1; j <= size * size - 1; j++)
+                {
+                    if (start1[j] == 0)
+                        continue;
+                    if (start1[i] > start1[j])
+                        inv_count++;
                 }
             }
-            return Hcost;
+
+            return inv_count;
         }
-        public void findIndex(int[,] arr, ref int row, ref int col)
+
+        int _findIndex(int[,]s)
         {
-            for (int i = 0; i < arr.GetLength(0); i++)
-                for (int j = 0; j < arr.GetLength(1); j++)
-                    if (arr[i, j] == 0)
-                    {
-                        row = i;
-                        col = j;
-                    }
+            
+            for(int i=0;i<size;i++)
+                for(int j = 0; j < size; j++)
+                {
+                    if (s[i, j] == 0)
+                        return i;
+                }
+            return 0;
         }
-        public void findMov(int RowIndex, int ColIndex, int rowSize, int Colsize)
-        {
-            if (RowIndex - 1 >= 0)
-            {
-                mov.up = true;
-                numOfMov++;
-            }
-            if (RowIndex + 1 < rowSize)
-            {
-                mov.down = true;
-                numOfMov++;
-            }
-            if (ColIndex - 1 >= 0)
-            {
-                mov.left = true;
-                numOfMov++;
-            }
-            if (ColIndex + 1 < Colsize)
-            {
-                mov.right = true;
-                numOfMov++;
-            }
-        }
+
+
     }
 }

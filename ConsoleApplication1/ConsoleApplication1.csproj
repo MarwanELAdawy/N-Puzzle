@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="A_Star.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="IDA_Star.cs" />
     <Compile Include="PriorityQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
